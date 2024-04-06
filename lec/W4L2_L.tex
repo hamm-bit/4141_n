@@ -1,0 +1,54 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{algpseudocode}
+\usepackage[english]{babel}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\title{W4L2}
+\author{ntatsu}
+\date{March 08, 2024}
+
+\begin{document}
+
+\maketitle
+
+\section{Working with CFLs}
+
+\subsection*{Emptiness of CFLs}
+\iffalse
+\begin{algorithmic}
+    \text{input: A CFG with state} 
+\end{algorithmic}
+\fi
+
+\subsection*{Chomsky Normal form}
+\begin{definition}
+    A context free (type II) grammar is in \textit{Chomsky Normal Form} if every production is one of the forms
+    \begin{itemize}
+        \item $S \rightarrow \epsilon$, or
+        \item $A \rightarrow BC$, where $B$ and $C$ are not $S$, or
+        \item $A \rightarrow a$
+    \end{itemize}
+    % \begin{displaymath}
+        
+    % \end{displaymath}
+
+\end{definition}
+
+The procedure of transforming to Chomsky Normal form is on pg.16
+
+
+\end{document}
+

@@ -1,0 +1,92 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{listings}
+\usepackage{algpseudocode}
+\usepackage{xparse}
+\usepackage[english]{babel}
+
+\def\pl{\partial}
+\def\dis{\displaystyle}
+\def\rarr{\rightarrow}
+
+% \newcommand{\newmacro}[nun_args]{<expr> #1 <expr> #2 ...}
+
+\newcommand{\uset}[2]{\underset{#1}{#2}}
+\newcommand{\mb}[1]{\mathbf{#1}}
+\newcommand{\tb}[1]{\textbf{#1}}
+\newcommand{\mm}[1]{\mathbb{#1}}
+\newcommand{\mr}[1]{\mathrm{#1}}
+\newcommand{\abs}[1]{|| #1 ||}
+
+\newcommand{\cdblk}[2]{
+	\begin{lstlistings}[language=#1]
+		#2
+	\end{lstlistings}
+}
+
+\newcommand{\cword}[1]{\texttt{\textcolor{blue}{#1}}}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\title{tut8}
+\author{ntatsu}
+\date{April 03, 2024}
+
+\begin{document}
+
+\maketitle
+
+\section{Rice}
+
+% ======================================================
+% begin here
+% ======================================================
+
+Check \tb{W7L1}
+
+\section{Tutorial}
+
+\subsection{Q1}
+We would attmept to reduce Hamiltonian path to Hamiltonian cycle
+
+On input $G(V, E)$
+\begin{itemize}
+    \item Construct $G'(V', E')$
+    \item Add an extra vertex and connect to every vertex in the graphic
+    \item Confirms if
+    \begin{itemize}
+        \item If $G \in \text{Ham} \infers G' \in \text{Ham cycle}$ Ham cycle in $G'$ connects the start and end of the Ham path
+        \item If $G' \in \text{Ham cycle} \infers G \in \text{Ham}$ Ham path in G is made by dropping the extern vertex and the corresponding path-laid edges.
+    \end{itemize}
+\end{itemize}
+
+\subsection{P or NP}
+Recall that
+\begin{itemize}
+    \item P can be solve by a deterministic TM in polynomial time
+    \item NP solution can be verified by a deterministic TM in polynomial time
+\end{itemize}
+
+Recall $P = NP$
+
+\subsection{Reduce 3 colour problem to 3SAT}
+For a 3-SAT with $m$ clauses
+\begin{itemize}
+    \item each $c$ in the 3-SAT, let $x_i$ denote the node, and $x_i' = \neg x_i$ denote its negation
+    \item in the above fashion, create $x_1$ and $x_2$ connected to the target node
+    \item 
+\end{itemize}
+
+\end{document}
+

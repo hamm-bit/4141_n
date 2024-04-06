@@ -1,0 +1,143 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{listings}
+\usepackage{algpseudocode}
+\usepackage{xparse}
+\usepackage[english]{babel}
+
+\def\pl{\partial}
+\def\dis{\displaystyle}
+\def\rarr{\rightarrow}
+
+% \newcommand{\newmacro}[nun_args]{<expr> #1 <expr> #2 ...}
+
+\newcommand{\uset}[2]{\underset{#1}{#2}}
+\newcommand{\mb}[1]{\mathbf{#1}}
+\newcommand{\tb}[1]{\textbf{#1}}
+\newcommand{\mm}[1]{\mathbb{#1}}
+\newcommand{\mr}[1]{\mathrm{#1}}
+\newcommand{\abs}[1]{|| #1 ||}
+
+\newcommand{\cdblk}[2]{
+	\begin{lstlistings}[language=#1]
+		#2
+	\end{lstlistings}
+}
+
+\newcommand{\cword}[1]{\texttt{\textcolor{blue}{#1}}}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+
+% \theoremstyle{proof}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\title{tut7}
+\author{ntatsu}
+\date{March 27, 2024}
+
+\begin{document}
+
+\maketitle
+
+\section{Turing}
+
+% ======================================================
+% begin here
+% ======================================================
+
+CFG equivalence can be solved by converting it into turing machines
+
+\subsection{PL for CFG}
+\begin{itemize}
+    \item $|vy| \geq 1$,
+    \item $|vxy| \leq p$,
+    \item $uv^nxy^nz \in L \forall n \geq 0$.
+\end{itemize}
+
+\subsection{CNF}
+For $A, B, C$ cannot be terminal strings,
+\begin{itemize}
+    \item $A \rightarrow BC$
+    \item $A \rightarrow a$
+    \item $S \rightarrow \epsilon$
+\end{itemize}
+
+\subsection{CFL example from lecture}
+\subsubsection*{Example}
+Let $L_1 = \{a^ib^ic^i | i > 0\}$. Prove that this is not a CFL. Let $p$ be pumping length, $w = a^pb^pc^p$
+\begin{itemize}
+    \item if $v^nxy^n = a^*b^*$, then $uxz \notin L$, given that $|vy| \geq 1$, then $uxz$ would have less than $a$ and $b$ and $p$ c, not an element of $L$.
+    \item similarly if $v^nxy^n = b^*c^*$
+    \item Hence not a CFL
+\end{itemize}
+
+\subsubsection*{Example}
+Let $L_1 = \{ww | w \in {0,1}^*\}$. Prove that this is not a CFL. Let $p$ be pumping length, take $w = 0^p1^p0^p1^p \in L$
+\begin{itemize}
+    \item if $v^nxy^n = 1^*0^*$, then given that $|vy| \geq 1$. Then $uxz$ would have $0^p1^{p-n}0^{p-m}1^p$, for $n, m : n + m \leq p$, where $=$ is achieved when $x = \epsilon$.
+    \item similarly if $v^nxy^n = 0^*1^*$, $uxz$ is not in $L$ regardless of what $v, x, y$ takes.
+    \item Hence not a CFL
+\end{itemize}
+
+\subsection{1b}
+\begin{definition}[Turing machines]
+    Define $\mr{TM : M}$ on input $\langle G_1, G_2 \rangle$
+\end{definition}
+
+\begin{itemize}
+    \item Use $CYK$ to check if $w \in L(G_1)$ and/or $L(G_2)$
+    \item If $w$ is in one language but not both, \tb{ACCEPT}
+    \item Else- kepping looking through $w$
+\end{itemize}
+
+\subsection{1c}
+$U_{CFG}$ is undecidable as $U_{CFG}$ is undecidable. \\ 
+We show $L$ is undecidable by showing $\bar{U_{CFG}}$
+\begin{proof}[Proof of claim]
+    On input $\langle G \rangle$ for $\bar{U_{CFG}}$, construct $\langle G_1, G_2 \rangle$ as
+    \begin{align*}
+        G_1 &= G_r \\
+        G_2 &= G_r \text{where} G_r: S \rarr \epsilon|ss|0|1
+    \end{align*}
+    Since $L(G_r)$ = \Sigma^*
+    \begin{align*}
+        \langle G \in \bar{U_{CFG}} \infers \langle G_1, G_r \rangle \in L
+        \langle G \in \bar{U_{CFG}} \infers \langle G_2, G_r \rangle \notin L
+    \end{align*}
+    $\therefore L$ is undecidable.
+\end{proof}
+
+\subsection{3a}
+No - you can write a TM for a decidable language which does not decide the language (by infinite loops instead of \tb{REJECT})
+
+\subsection{3b}
+\[
+    A_{TM} : \{\langle M, w \rangle : M is a TM that accepts w \}
+\]
+On input $\langle M, w \rangle$, construct $M_1$,
+\begin{itemize}
+    \item Definition of $M_1$
+    \item On input $x$
+    \begin{itemize}
+        \item Ignore $x$
+        \item Run $M$ on input $w$
+        \item If $M$ accepts, \tb{ACCEPT}
+        \item If $M$ rejects, \tb{infinite loop}
+    \end{itemize}
+    \item If $w \in L(M)$, $M_1$ is a decider (if \tb{ACCEPTING})
+    \item If $w \notin L(M)$, $M_1$ is not a decider (either simulating infinite loops or $\mb{M_1}$ infinite loops)
+\end{itemize} 
+
+
+\end{document}
+
