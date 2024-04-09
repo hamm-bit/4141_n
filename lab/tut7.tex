@@ -89,6 +89,22 @@ Let $L_1 = \{ww | w \in {0,1}^*\}$. Prove that this is not a CFL. Let $p$ be pum
     \item Hence not a CFL
 \end{itemize}
 
+\subsubsection*{Overnight problem}
+Given a word $w$ and a CFG $G$, how can we tell if $w \notin L(G)$
+\begin{proof}
+    \begin{algorithmic}
+        \While{$a \in w = a:w'$}
+            \If{$M(a)$ ACCEPT}
+                accepts and exits
+                \Return
+            \Else
+                continue
+                if $w$ is not in $G$, it will simply be in infinite loop.
+            \EndIf
+        \EndWhile
+    \end{algorithmic}
+\end{proof}
+
 \subsection{1b}
 \begin{definition}[Turing machines]
     Define $\mr{TM : M}$ on input $\langle G_1, G_2 \rangle$

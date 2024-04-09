@@ -4,19 +4,72 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{amsthm}
 \usepackage{tikz}
+\usepackage{pgfplots}
 \usepackage{listings}
 \usepackage{algpseudocode}
+\usepackage{xparse}
+\usepackage[english]{babel}
 
-\title{W5L1}
+\def\pl{\partial}
+\def\dis{\displaystyle}
+\def\rarr{\rightarrow}
+
+% \newcommand{\newmacro}[nun_args]{<expr> #1 <expr> #2 ...}
+
+\newcommand{\uset}[2]{\underset{#1}{#2}}
+\newcommand{\mb}[1]{\mathbf{#1}}
+\newcommand{\tb}[1]{\textbf{#1}}
+\newcommand{\mm}[1]{\mathbb{#1}}
+\newcommand{\mr}[1]{\mathrm{#1}}
+\newcommand{\abs}[1]{|| #1 ||}
+
+\newcommand{\cdblk}[2]{
+	\begin{lstlistings}[language=#1]
+		#2
+	\end{lstlistings}
+}
+
+\newcommand{\cword}[1]{\texttt{\textcolor{blue}{#1}}}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+
+% \theoremstyle{proof}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\title{tut7}
 \author{ntatsu}
-\date{March 13, 2024}
+\date{March 27, 2024}
 
 \begin{document}
 
 \maketitle
 
-\section{Computation}
+\section{CNF}
+
+Check CFG emptiness (refer to problem on `W5L1.tex`)
+
+Let $G = (V, \Sigma, P, S)$ be CFG,
+
+\begin{itemize}
+    \item Define equivalent CFG $(G_0 = (V \cup \{S_0\}), \Sigma, P_0, S_0)$ with a init variable $S_0$ and the production $S_0 \rightarrow S$. We also remove all productions of the form $A \rightarrow \epsilon$ and patch this up by introducing new productions for every occurences of $A$ in a body with that occurences removed.
+    \item (E.g., $A \rightarrow \epsilon | aAbA \ \text{becomes} \ A \rightarrow ab | abA | aAb | aAbA$)
+    \item Productions $B \rightarrow A$ are replaced by $B \rightarrow \epsilon$ unless that is one we had removed earlier
+    \item Repeat until $\epsilon$ occurs at most in $S_0 \rightarrow \epsilon$
+    \item Remove terminals from RHS, if such terminal states are accompanied by other terminals or non-termials.
+    \item Remove singleton rules ($A \rightarrow B$), where $B$ is non-terminal
+    \item Reduce RHS to pairs of non-terminals.
+
+\end{itemize}
+
+\section{CYK}
+CYK algorithm is a DP on constructing all the maximum possible path of construction.
+The path of checking works by matching, given the square that is being constructed, bottom up for the column of that square, and top down for the lower right diagonal.
+
+Note that the algorithm can only apply on CNF-ed rules.
 
 \end{document}
 

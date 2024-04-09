@@ -1,0 +1,150 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{listings}
+\usepackage{algpseudocode}
+\usepackage{xparse}
+\usepackage{ebproof}
+\usepackage{mathptmx}
+% \usepackage{fontspec}
+\usepackage[english]{babel}
+
+\def\pl{\partial}
+\def\dis{\displaystyle}
+\def\rarr{\rightarrow}
+
+% \newcommand{\newmacro}[nun_args]{<expr> #1 <expr> #2 ...}
+\DeclareMathAlphabet{\altmathcal}{OMS}{cmsy}{m}{n}
+
+\newcommand{\uset}[2]{\underset{#1}{#2}}
+\newcommand{\mb}[1]{\mathbf{#1}}
+\newcommand{\tb}[1]{\textbf{#1}}
+\newcommand{\mm}[1]{\mathbb{#1}}
+\newcommand{\mr}[1]{\mathrm{#1}}
+\newcommand{\abs}[1]{|| #1 ||}
+
+\newcommand{\cdblk}[2]{
+	\begin{lstlistings}[language=#1]
+		#2
+	\end{lstlistings}
+}
+
+\newcommand{\cword}[1]{\texttt{\textcolor{blue}{#1}}}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\title{Ruleset}
+\author{ntatsu}
+\date{April 09, 2024}
+
+\begin{document}
+
+\maketitle
+
+\section{Grammar conversion to CNF}
+Checking if the following words are in $G$ involves the use of the CYK algorithm. However $R$ is not in CNF, so we have to convert them first as follows.
+
+Steps involved:
+
+\begin{itemize}
+    \item Remove $\epsilon$
+    \begin{itemize}
+        \item There's no epsilon, we simply add singular terms into $E$
+    \end{itemize}
+    \item Remove all non-singular terminal symbols
+    \begin{itemize}
+        \item $E_0 \rightarrow E$
+        \item $E \rightarrow PEE | MEE | NE | K | 0 | 1 | 2 | I | x | y$
+        \item $K \rightarrow 0 | 1 | 2$
+        \item $I \rightarrow x | y$
+        \item $P \rightarrow +$
+        \item $M \rightarrow *$
+        \item $N \rightarrow -$
+    \end{itemize}
+    \item Remove singleton rules where RHS is non-terminal
+    \begin{itemize}
+        \item $E_0 \rightarrow PEE | MEE | NE | 0 | 1 | 2 | x | y$
+        \item $E \rightarrow PEE | MEE | NE | 0 | 1 | 2 | x | y$
+        \item $P \rightarrow +$
+        \item $M \rightarrow *$
+        \item $N \rightarrow -$
+        \item Since $K$ and $I$ is not paired with any other non-terminal symbols, they can be removed altogether from the $R$.
+    \end{itemize}
+    \item Reduce RHS to pairs of non-terminals
+    \begin{itemize}
+        \item $E_1 \rightarrow EE$
+        \item $E_0 \rightarrow PE_1 | ME_1 | NE | 0 | 1 | 2 | x | y$
+        \item $E \rightarrow PE_1 | ME_1 | NE | 0 | 1 | 2 | x | y$
+        \item $P \rightarrow +$
+        \item $M \rightarrow *$
+        \item $N \rightarrow -$
+    \end{itemize}
+    \item Hence the above ruleset is the CNF of the given grammar.
+\end{itemize}
+
+\section{Derivation}
+
+The given grammar illustrates the Polish notation for arithmetics. We could be higher-level about this, instead of using the CYK algorithm on a strict CFG sense. We have,
+
+% ======================================================
+% begin here
+% ======================================================
+\subsection{1)}
+The following can be derived by syntax tree deduction. Deduction constructs a viable deduction of the given word from the syntax.
+\[
+\begin{prooftree}
+                \hypo{}
+            \infer 1 {1 \enskip \quad E}
+                \hypo{}
+            \infer 1 {1 \enskip \quad E}
+        \infer 2 {+ 1 y \enskip \quad PEE}
+                    \hypo {}
+                \infer 1 {2 \enskip \quad E}
+            \infer 1 {-2 \enskip \quad NE}
+                \hypo {}
+            \infer 1 {0 \enskip \quad E}
+        \infer 2 {* -2 0 \enskip \quad MEE}
+    \infer 2 {+ + 1 * -2 0 \enskip \quad PEE}
+\end{prooftree}
+\]
+
+\subsection{2)}
+\[
+\begin{prooftree}
+            \hypo {}
+        \infer 1 {1 \enskip \quad E}
+            \hypo {* x \enskip \quad N/A}
+                \hypo {}
+            \infer 1 {x \enskip \quad E}
+        \infer 2 {* * x x \enskip \quad MEE}
+    \infer 2 {+ 1 * * x x \enskip \quad PEE}
+\end{prooftree}
+\]
+One branch of the above syntax tree cannot reach an endpoint. Hence the word is not part of this grammar.
+
+\subsection{3)}
+\[
+\begin{prooftree}
+            \hypo{}
+        \infer 1 {0 \enskip \quad E}
+                \hypo {}
+            \infer 1 {2 \enskip \quad E}
+            \hypo {1 0 \enskip \quad N/A}
+        \infer 2 {-2 1 0 \enskip \quad NE}
+    \infer 2 {* 0 - *2 1 0 \enskip \quad MEE}
+\end{prooftree}
+\]
+One branch of the above syntax tree cannot reach an endpoint. Hence the word is not part of this grammar.
+
+\end{document}
+
