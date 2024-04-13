@@ -1,0 +1,131 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{listings}
+\usepackage{algpseudocode}
+\usepackage{xparse}
+\usepackage{ebproof}
+\usepackage{mathptmx}
+% \usepackage{fontspec}
+\usepackage[english]{babel}
+
+\def\pl{\partial}
+\def\dis{\displaystyle}
+\def\rarr{\rightarrow}
+
+% \newcommand{\newmacro}[nun_args]{<expr> #1 <expr> #2 ...}
+\DeclareMathAlphabet{\altmathcal}{OMS}{cmsy}{m}{n}
+
+\newcommand{\uset}[2]{\underset{#1}{#2}}
+\newcommand{\mb}[1]{\mathbf{#1}}
+\newcommand{\tb}[1]{\textbf{#1}}
+\newcommand{\mm}[1]{\mathbb{#1}}
+\newcommand{\mr}[1]{\mathrm{#1}}
+\newcommand{\abs}[1]{|| #1 ||}
+
+\newcommand{\cdblk}[2]{
+	\begin{lstlistings}[language=#1]
+		#2
+	\end{lstlistings}
+}
+
+\newcommand{\cword}[1]{\texttt{\textcolor{blue}{#1}}}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\title{W8L2}
+\author{ntatsu}
+\date{April 10, 2024}
+
+\begin{document}
+
+\maketitle
+
+\section{NP-completeness}
+
+% ======================================================
+% begin here
+% ======================================================
+Recall that proving NP-completeness is the conjunction of proving some problem in NP, and is also NP-hard
+
+\begin{itemize}
+    \item Show that problem has P certificate
+    \item Show that there exists P transformation to NP-hard problem
+\end{itemize}
+
+\subsection{Moar Reductions}
+
+\subsubsection*{CSAT}
+\begin{definition}[CSAT]
+    CSAT is SAT except its clauses are in conjunctive normal form (CNF, not to be confused with Chomsky Normal Form)
+\end{definition}
+
+So far this is still not very obvious, we could consider another special case of CSAT being 3SAT which we should have memory of. \\
+Reduction from SAT to 3SAT is talked about in \tb{3821}. We ommit it here but we can do a quick vocal recall.
+\begin{itemize}
+    \item any clauses of length 1 to 3 have trivial transformation
+    \item any clauses of legnth greater than 3 will take the form $\{t_1, t_2, s_1\}\{\neg s_1, t_4, s_2\}\{\neg s_2, t_6, s_3\}\dots$
+    \item where $s_1, s_2, \dots$ is dependent on the truth value of the previously omitted clauses
+\end{itemize}
+
+\subsubsection*{nature of NP}
+An NP problem always has a corresponding non-deterministic TM that matches its solution space.
+
+\subsubsection*{Vertex Cover}
+Reduce 3SAT to VC
+\begin{itemize}
+    \item $n$ vows
+    \item $m$ clauses
+    \item Truth assignment
+    \begin{itemize}
+        \item assign truth values, if the vertex is covered or not
+        \item we can recall to \tb{tut8} reduction of 3COL to 3SAT
+    \end{itemize}
+\end{itemize}
+
+Steps we can develop
+\begin{itemize}
+    \item $n$ vows and $m$ clauses
+    \item full proof on \tb{pg.9}
+    \item variable gadgets should have an edge connecting two variables taking the opposite negation
+    \item clause gadgets should take $3m$ vertices and $3m$ edges.
+    \item the resulting graph would have $2n + 3m$ vertices.
+    \item an example of the clause $(x \vee \neg y \vee z)$ would take the shape of
+    \begin{itemize}
+        \item a central triangle clause
+        \item the nodes of the clauses are connecting to the corresponding variable gadgets to its corresponding side (i.e. $x$ to $x$, $\neg y$ to $\neg y$ etc.)
+    \end{itemize}
+    \item If the truth assignment is satisfiable, then the vertex cover of $k$ can achieved
+    \item conversely, if the vertex cover should cover at least two of the three of a triangular clause, it is guaranteed that the two covered vertices are not of the same variables with opposing negations.
+\end{itemize}
+
+\subsubsection*{Clique}
+Knowing the relation between independent set and vertex cover, we can ensure that
+\begin{itemize}
+    \item $\uset{(G, K)}{\text{VC}} \leq_p \uset{\bar{G}, n - k}{\text{CLIQUE}}$
+\end{itemize}
+
+\subsection{Hamiltonian Path}
+Reductions from Hamiltonian to 3SAT is unintuitive, so we can introduce an intermediate problem,
+\begin{definition}[Zig-zag]
+    The $n$ variable gadgets will total $(4 + 2m)n \ \text{gadgets}, (4m + 8)n \ \text{edges}$. The $m$ clause vertices will serve as the "MITM" where a zig or a zag will shortcut and go through a clause correspondingly, and $m$ is directed. For example, if that clause is setup for a zig, then if a zag shortcuts through the clause, it will return to a position that is a subset of that zag, indicating that it has been covered already, negating the truth value of this Hamiltonian path (since it is no longer one).
+\end{definition}
+
+\section{Complexity Class}
+
+\begin{itemize}
+    \item coNP is like NP, except the P accepter is replaced by a P rejecter.
+\end{itemize}
+
+\end{document}
+
